@@ -1,8 +1,9 @@
 import urllib.request
 import json
+import os
 
-BOT_TOKEN = "8711721821:AAG5l5Rwpv3m24PCYeCb8_MtD9cASXf0pDM"
-CHAT_ID   = "6374513213"
+BOT_TOKEN = os.environ.get("BOT_TOKEN")
+CHAT_ID   = os.environ.get("CHAT_ID")
 
 SAHAM = {
     "ANTM": {"harga_beli": 3700, "lot": 6},
@@ -20,12 +21,7 @@ def ambil_harga(simbol):
         return None
 
 def kirim(pesan):
-    proxy = urllib.request.ProxyHandler({
-        "http": "http://proxy.server:3128",
-        "https": "http://proxy.server:3128"
-    })
-    opener = urllib.request.build_opener(proxy)
-    url = f"https://api.telegram.org/bot{BOT_TOKEN}/sendMessage"
+    url  = f"https://api.telegram.org/bot{BOT_TOKEN}/sendMessage"
     data = json.dumps({
         "chat_id": CHAT_ID,
         "text": pesan,
@@ -35,7 +31,7 @@ def kirim(pesan):
         url, data=data,
         headers={"Content-Type": "application/json"}
     )
-    opener.open(req, timeout=10)
+    urllib.request.urlopen(req, timeout=10)
 
 laporan = "📊 <b>CEK HARGA SAHAM SYARIAH</b>\n━━━━━━━━━━━━━━\n"
 
